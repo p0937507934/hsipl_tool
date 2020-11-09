@@ -60,14 +60,14 @@ class TargetDetection:
                        win_width] = self.cem(self._HIM[i: i + win_height, j: j + win_width, :], d)
         return result
 
-    def hcem(self, max_it=100, λ=200, e=1e-6):
+    def hcem(self, max_it=100, lamda=200, e=1e-6):
         '''
         Hierarchical Constrained Energy Minimization
 
         param HIM: hyperspectral imaging, type is 3d-array
         param d: desired target d (Desired Signature), type is 2d-array, size is [band num, 1], for example: [224, 1]
         param max_it: maximum number of iterations, type is int
-        param λ: coefficients for constructing a new CEM detector, type is int
+        param lamda: coefficients for constructing a new CEM detector, type is int
         param e: stop iterating until the error is less than e, type is int
         '''
         imgH = self._HIM.shape[0]  # image height
@@ -88,7 +88,7 @@ class TargetDetection:
                 (self._d.T@np.linalg.inv(R + 0.0001*np.eye(D))@self._d)
 
             y = w.T@r
-            Weight = 1 - np.exp(-λ*y)
+            Weight = 1 - np.exp(-lamda*y)
             Weight[Weight < 0] = 0
 
             res = np.linalg.norm(y_old)**2/N - np.linalg.norm(y)**2/N
